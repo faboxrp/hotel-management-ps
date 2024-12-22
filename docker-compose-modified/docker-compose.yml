@@ -20,8 +20,6 @@ services:
     restart: unless-stopped
     depends_on:
       - hotel-database
-    ports:
-      - 8080:80
     environment:
       DB_SERVER: mysql-hotel-management
       DB_NAME: ${MYSQL_DATABASE}
