@@ -20,7 +20,7 @@ services:
     depends_on:
       - mysql
     ports:
-      - 9080:80
+      - 8080:80
       # - 9222:22
     environment:
       MYSQL_SERVER: ${MYSQL_SERVER}
@@ -68,7 +68,7 @@ networks:
 
 volumes:
   dbdata:
-  qloappsdata:
+  psdata:
 
     # comandos a ejecutar despues de la instalacion
     # docker exec -i qloapps bash -c 'rm -rf /home/hotel-management-ps/www/hotelcommerce/install'
