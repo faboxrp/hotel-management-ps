@@ -1,0 +1,38 @@
+{
+    "services": [
+        {
+            "type": "app",
+            "data": {
+                "projectName": "project_name",
+                "serviceName": "hotel-prestashop",
+                "source": {
+                    "type": "image",
+                    "image": "webkul/qloapps_docker:latest"
+                },
+                "domains": [
+                    {
+                        "host": "$(EASYPANEL_DOMAIN)",
+                        "port": 80
+                    }
+                ],
+                "env": "DATABASE_SERVER_ADDRESS=$(PROJECT_NAME)_mysql-hotel\nDATABASE_NAME=$(PROJECT_NAME)\nDATABASE_LOGIN=mysql\nDATABASE_PASSWORD=Zidko_2024.HT\nTABLES_PREFIX=ps_",
+                "mounts": [
+                    {
+                        "type": "volume",
+                        "name": "qloappsdata",
+                        "mountPath": "/home/qloapps/www/hotelcommerce"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "mysql",
+            "data": {
+                "projectName": "project_name",
+                "serviceName": "mysql-hotel",
+                "image": "mysql:5.7",
+                "password": "Zidko_2024.HT"
+            }
+        }
+    ]
+}
