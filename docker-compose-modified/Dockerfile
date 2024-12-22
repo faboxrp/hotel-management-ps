@@ -22,11 +22,14 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /var/www/html
 RUN git clone --depth=1 https://github.com/Qloapps/QloApps.git .
 
-# Eliminar el contenido predeterminado
-RUN rm -rf /var/www/html/*
-
 # Configurar permisos para Apache
 RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
 
-# Habilitar módulos de Apache necesarios
+# Eliminar archivos innecesarios
+RUN rm -rf /var/www/html/*
+
+# Habilitar módulos necesarios de Apache
 RUN a2enmod rewrite
+
+# Exponer puerto 80
+EXPOSE 80
