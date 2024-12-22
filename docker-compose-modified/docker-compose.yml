@@ -3,7 +3,7 @@ name: hotel-management-docker-compose
 services:
   mysql:
     container_name: mysql-hotel-management
-    image: mariadb:10.5
+    image: mysql:5.7
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -16,9 +16,7 @@ services:
 
   hotel-management:
     container_name: hotel-management
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: faboxrp/hotel-management:latest # Usa la imagen reconstruida
     restart: unless-stopped
     depends_on:
       - mysql
