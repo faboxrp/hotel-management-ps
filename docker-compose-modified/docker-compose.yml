@@ -3,7 +3,7 @@ name: hotel-management-ps
 services:
   mysql:
     container_name: mysql-hotel
-    image: mysql:5.7
+    image: mariadb:10.5
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
