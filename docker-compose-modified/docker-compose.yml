@@ -1,39 +1,75 @@
-name: hotel-management-docker-compose
+name: hotel-management-ps
 
 services:
-  hotel-database:
-    container_name: mysql-hotel-management
-    image: mariadb:10.5
+  mysql:
+    container_name: mysql-hotel
+    image: mysql:5.7
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
     networks:
-      - hotel-management-network
+      - hotel_network
     volumes:
       - dbdata:/var/lib/mysql
 
-  hotel-management:
-    container_name: hotel-management
-    image: faboxrp/hotel-management:latest # Usa la imagen reconstruida
+  hotel-management-ps:
+    container_name: hotel-management-ps
+    image: webkul/qloapps_docker:latest
     restart: unless-stopped
     depends_on:
-      - hotel-database
+      - mysql
+    ports:
+      - 9080:80
+      # - 9222:22
     environment:
-      DB_SERVER: mysql-hotel-management
-      DB_NAME: ${MYSQL_DATABASE}
-      DB_USER: ${MYSQL_USER}
-      DB_PASSWD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_SERVER: ${MYSQL_SERVER}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      # MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      # DB_SERVER: ${MYSQL_SERVER}
+      # DB_NAME: ${MYSQL_DATABASE}
+      # DB_USER: ${MYSQL_USER}
+      # DB_PASSWD: ${MYSQL_ROOT_PASSWORD}
+      # PS_FOLDER_ADMIN: ${PS_FOLDER_ADMIN}
+      # PS_FOLDER_INSTALL: ${PS_FOLDER_INSTALL}
+      USER_PASSWORD: ${USER_PASSWORD}
+
     networks:
-      - hotel-management-network
+      - hotel_network
     volumes:
-      - psdata:/var/www/html
+      - psdata:/home/hotel-management-ps/www/hotelcommerce
+      #   - type: bind
+      #     source: ./modules # local path to the module
+      #     target: /home/hotel-management-ps/www/hotelcommerce/modules # path to be mounted in the container
+      #   - type: bind
+      #     source: ./themes # local path to the theme
+      #     target: /home/hotel-management-ps/www/hotelcommerce/themes # path to be mounted in the container
+
+      # phpmyadmin:
+      #   image: phpmyadmin/phpmyadmin
+      #   container_name: phpmyadmin
+      #   depends_on:
+      #     - mysql
+      #   environment:
+      #     PMA_HOST: mysql
+      #     PMA_PORT: 3306
+      #     PMA_ARBITRARY: 1
+      #   restart: unless-stopped
+      #   ports:
+      #     - 8081:80
+      #   networks:
+      #     - hotel_network
 
 networks:
-  hotel-management-network:
+  hotel_network:
 
 
 volumes:
   dbdata:
-  psdata:
+  qloappsdata:
+
+    # comandos a ejecutar despues de la instalacion
+    # docker exec -i qloapps bash -c 'rm -rf /home/hotel-management-ps/www/hotelcommerce/install'
+    # docker exec -i qloapps bash -c 'mv /home/hotel-management-ps/www/hotelcommerce/admin /home/hotel-management-ps/www/hotelcommerce/zidkoadmin'
